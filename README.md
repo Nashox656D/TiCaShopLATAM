@@ -88,5 +88,3 @@ npm install react-router-dom
 ```
 
 ---
-
-Desarrollado por GitHub Copilot para TiCaShop LATAM. Última actualización: Octubre 2025.
