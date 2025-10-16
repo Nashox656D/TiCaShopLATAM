@@ -5,7 +5,6 @@ function EmpleadosPage() {
   const [nuevoEmpleado, setNuevoEmpleado] = useState({
     nombre: '',
     rut: '',
-    puesto: '',
     cargo: '',
     email: '',
     fecha_ingreso: '',
@@ -42,7 +41,6 @@ function EmpleadosPage() {
         setNuevoEmpleado({
           nombre: '',
           rut: '',
-          puesto: '',
           cargo: '',
           email: '',
           fecha_ingreso: '',
@@ -74,10 +72,10 @@ function EmpleadosPage() {
       </form>
       {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
       <table border="1" cellPadding="6" style={{ width: '100%' }}>
-        <thead><tr><th>ID</th><th>Nombre</th><th>Puesto</th></tr></thead>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Cargo</th></tr></thead>
         <tbody>
           {empleados.map(e => (
-            <tr key={e.id}><td>{e.id}</td><td>{e.nombre}</td><td>{e.puesto}</td></tr>
+            <tr key={e.id}><td>{e.id}</td><td>{e.nombre}</td><td>{e.cargo || ''}</td></tr>
           ))}
         </tbody>
       </table>

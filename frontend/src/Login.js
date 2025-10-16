@@ -22,7 +22,7 @@ function Login({ onLogin }) {
         headers: { 'Authorization': `Token ${data.token}` }
       });
       const user = await userRes.json();
-      onLogin({ token: data.token, username: user.username, is_superuser: user.is_superuser });
+      onLogin({ token: data.token, username: user.username, is_superuser: user.is_superuser, cargo: user.cargo });
     } catch (err) {
       setError('Usuario o contraseña incorrectos');
     }

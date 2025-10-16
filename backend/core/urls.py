@@ -50,12 +50,22 @@ class UserInfoView(APIView):
     def get(self, request):
         user = request.user
         tipo = getattr(user, 'tipo', None)
+        # Try to include the rrhh.Empleado.cargo if exists
+        cargo = None
+        try:
+            from rrhh.models import Empleado
+            empleado = Empleado.objects.filter(user=user).first()
+            if empleado:
+                cargo = empleado.cargo
+        except Exception:
+            cargo = None
         return Response({
             'username': user.username,
             'is_superuser': user.is_superuser,
             'is_staff': user.is_staff,
             'email': user.email,
             'tipo': tipo,
+            'cargo': cargo,
         })
 
 urlpatterns = [

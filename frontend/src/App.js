@@ -259,6 +259,7 @@ function App() {
 
   // Mostrar el rol en la UI
   const rol = usuario.is_superuser ? 'Administrador' : 'Empleado';
+  const cargo = usuario.cargo || null;
 
   return (
     <div className="App" style={{ fontFamily: 'Arial, sans-serif', maxWidth: 900, margin: '0 auto', padding: 24 }}>
@@ -267,27 +268,43 @@ function App() {
       </div>
       <h1>TiCaShop LATAM ERP</h1>
       <nav style={{ marginBottom: 24 }}>
-        <Link to="/productos"><button>Productos</button></Link>
-        <Link to="/clientes"><button>Clientes</button></Link>
-        <Link to="/stock"><button>Stock</button></Link>
-        <Link to="/cotizaciones"><button>Cotizaciones</button></Link>
-        <Link to="/ordenes"><button>Órdenes de Compra</button></Link>
-        <Link to="/facturas"><button>Facturas</button></Link>
-        <Link to="/empleados"><button>Empleados</button></Link>
-        <Link to="/tickets"><button>Tickets</button></Link>
+        {/* Recursos Humanos solo ve empleados y vacaciones */}
+        {cargo === 'Recursos Humanos' ? (
+          <>
+            <Link to="/empleados"><button>Empleados</button></Link>
+            {/* Si tienes una página de vacaciones, agrega aquí el link */}
+          </>
+        ) : (
+          <>
+            <Link to="/productos"><button>Productos</button></Link>
+            <Link to="/clientes"><button>Clientes</button></Link>
+            <Link to="/stock"><button>Stock</button></Link>
+            {/* hide the following if cargo is Empleado */}
+            {cargo !== 'Empleado' && (
+              <>
+                <Link to="/cotizaciones"><button>Cotizaciones</button></Link>
+                <Link to="/ordenes"><button>Órdenes de Compra</button></Link>
+                <Link to="/facturas"><button>Facturas</button></Link>
+                <Link to="/empleados"><button>Empleados</button></Link>
+                <Link to="/tickets"><button>Tickets</button></Link>
+              </>
+            )}
+          </>
+        )}
       </nav>
       {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
       <Routes>
         <Route path="/" element={<Navigate to="/productos" />} />
-        <Route path="/productos" element={<ProductosPage
+        <Route path="/productos" element={cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <ProductosPage
           productos={productos}
           setProductos={setProductos}
           nuevo={nuevo}
           setNuevo={setNuevo}
           handleSubmit={handleSubmit}
           handleChange={handleChange}
+          usuario={usuario}
         />} />
-        <Route path="/clientes" element={<ClientesPage
+        <Route path="/clientes" element={cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <ClientesPage
           clientes={clientes}
           setClientes={setClientes}
           nuevoCliente={nuevoCliente}
@@ -295,7 +312,7 @@ function App() {
           handleClienteSubmit={handleClienteSubmit}
           handleClienteChange={handleClienteChange}
         />} />
-        <Route path="/stock" element={<StockPage
+        <Route path="/stock" element={cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <StockPage
           stock={stock}
           setStock={setStock}
           nuevoStock={nuevoStock}
@@ -305,8 +322,9 @@ function App() {
           productosDisponibles={productosDisponibles}
           buscaStock={buscaStock}
           setBuscaStock={setBuscaStock}
+          usuario={usuario}
         />} />
-        <Route path="/cotizaciones" element={<CotizacionesPage
+        <Route path="/cotizaciones" element={cargo === 'Empleado' || cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <CotizacionesPage
           cotizaciones={cotizaciones}
           setCotizaciones={setCotizaciones}
           nuevaCot={nuevaCot}
@@ -314,7 +332,7 @@ function App() {
           handleCotSubmit={handleCotSubmit}
           handleCotChange={handleCotChange}
         />} />
-        <Route path="/ordenes" element={<OrdenesPage
+        <Route path="/ordenes" element={cargo === 'Empleado' || cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <OrdenesPage
           ordenes={ordenes}
           setOrdenes={setOrdenes}
           nuevaOrden={nuevaOrden}
@@ -322,7 +340,7 @@ function App() {
           handleOrdenSubmit={handleOrdenSubmit}
           handleOrdenChange={handleOrdenChange}
         />} />
-        <Route path="/facturas" element={<FacturasPage
+        <Route path="/facturas" element={cargo === 'Empleado' || cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <FacturasPage
           facturas={facturas}
           setFacturas={setFacturas}
           nuevaFactura={nuevaFactura}
@@ -338,7 +356,7 @@ function App() {
           handleEmpleadoSubmit={handleEmpleadoSubmit}
           handleEmpleadoChange={handleEmpleadoChange}
         />} />
-        <Route path="/tickets" element={<TicketsPage
+        <Route path="/tickets" element={cargo === 'Empleado' || cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <TicketsPage
           tickets={tickets}
           setTickets={setTickets}
           nuevoTicket={nuevoTicket}

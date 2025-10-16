@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import StockSection from './StockSection';
 
+
 function StockPage(props) {
+  const { usuario } = props;
   const [stock, setStock] = useState([]);
   const [productosDisponibles, setProductosDisponibles] = useState([]);
   const [nuevoStock, setNuevoStock] = useState({ producto: '', cantidad: '' });
@@ -53,6 +55,7 @@ function StockPage(props) {
       productosDisponibles={productosDisponibles}
       buscaStock={buscaStock}
       setBuscaStock={setBuscaStock}
+      usuario={usuario}
     />
   );
 }

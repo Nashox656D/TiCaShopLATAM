@@ -1,6 +1,6 @@
 import React from 'react';
 
-function StockSection({ stock, handleStockSubmit, nuevoStock, handleStockChange, productosDisponibles, buscaStock, setBuscaStock }) {
+function StockSection({ stock, handleStockSubmit, nuevoStock, handleStockChange, productosDisponibles, buscaStock, setBuscaStock, usuario }) {
   // Agrupar stock por producto
   const stockAgrupado = stock.reduce((acc, s) => {
     const productoInfo = s.productoInfo || {};
@@ -29,32 +29,34 @@ function StockSection({ stock, handleStockSubmit, nuevoStock, handleStockChange,
   return (
     <section>
       <h2>Stock</h2>
-      <form onSubmit={handleStockSubmit} style={{ marginBottom: 16 }}>
-        <select 
-          name="producto" 
-          value={nuevoStock.producto} 
-          onChange={handleStockChange}
-          required
-          style={{ padding: '4px', marginRight: '8px' }}
-        >
-          <option value="">Seleccione un producto</option>
-          {productosDisponibles.map(p => (
-            <option key={p.id} value={p.sku}>
-              {p.sku} - {p.nombre}
-            </option>
-          ))}
-        </select>
-        <input 
-          name="cantidad" 
-          type="number" 
-          placeholder="Cantidad" 
-          value={nuevoStock.cantidad} 
-          onChange={handleStockChange}
-          required
-          min="1"
-        />{' '}
-        <button type="submit">Agregar</button>
-      </form>
+      {usuario?.cargo !== 'Empleado' && (
+        <form onSubmit={handleStockSubmit} style={{ marginBottom: 16 }}>
+          <select 
+            name="producto" 
+            value={nuevoStock.producto} 
+            onChange={handleStockChange}
+            required
+            style={{ padding: '4px', marginRight: '8px' }}
+          >
+            <option value="">Seleccione un producto</option>
+            {productosDisponibles.map(p => (
+              <option key={p.id} value={p.sku}>
+                {p.sku} - {p.nombre}
+              </option>
+            ))}
+          </select>
+          <input 
+            name="cantidad" 
+            type="number" 
+            placeholder="Cantidad" 
+            value={nuevoStock.cantidad} 
+            onChange={handleStockChange}
+            required
+            min="1"
+          />{' '}
+          <button type="submit">Agregar</button>
+        </form>
+      )}
       
       <div style={{ marginBottom: 16 }}>
         <input
