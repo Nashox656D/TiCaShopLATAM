@@ -22,7 +22,10 @@ function Login({ onLogin }) {
         headers: { 'Authorization': `Token ${data.token}` }
       });
       const user = await userRes.json();
-      onLogin({ token: data.token, username: user.username, is_superuser: user.is_superuser, cargo: user.cargo });
+      const usuarioObj = { token: data.token, username: user.username, is_superuser: user.is_superuser, cargo: user.cargo };
+      // persist token so page refresh keeps user logged
+      try { localStorage.setItem('ticashop_token', data.token); } catch (e) { /* ignore */ }
+      onLogin(usuarioObj);
     } catch (err) {
       setError('Usuario o contraseña incorrectos');
     }

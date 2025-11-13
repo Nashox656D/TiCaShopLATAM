@@ -45,6 +45,21 @@ function App() {
   // Errores
   const [error, setError] = useState('');
 
+  // On mount, restore user from localStorage token if present
+  useEffect(() => {
+    const token = (() => {
+      try { return localStorage.getItem('ticashop_token'); } catch (e) { return null; }
+    })();
+    if (token) {
+      fetch('http://127.0.0.1:8000/api/user/', { headers: { 'Authorization': `Token ${token}` } })
+        .then(r => r.json())
+        .then(user => {
+          if (user && user.username) setUsuario({ token, username: user.username, is_superuser: user.is_superuser, cargo: user.cargo });
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   useEffect(() => {
     setError('');
     if (vista === 'productos') {
@@ -258,13 +273,13 @@ function App() {
   }
 
   // Mostrar el rol en la UI
-  const rol = usuario.is_superuser ? 'Administrador' : 'Empleado';
-  const cargo = usuario.cargo || null;
+  const cargo = usuario && usuario.cargo ? usuario.cargo : null;
+  const rol = usuario && usuario.is_superuser ? 'Administrador' : (cargo || 'Empleado');
 
   return (
     <div className="App" style={{ fontFamily: 'Arial, sans-serif', maxWidth: 900, margin: '0 auto', padding: 24 }}>
-      <div style={{ textAlign: 'right', marginBottom: 8 }}>
-        <b>Usuario:</b> {usuario.username} &nbsp;|&nbsp; <b>Rol:</b> {rol} &nbsp;|&nbsp; <button onClick={() => setUsuario(null)}>Cerrar sesión</button>
+        <div style={{ textAlign: 'right', marginBottom: 8 }}>
+        <b>Usuario:</b> {usuario.username} &nbsp;|&nbsp; <b>Rol:</b> {rol} &nbsp;|&nbsp; <button onClick={() => { try { localStorage.removeItem('ticashop_token'); } catch(e){}; setUsuario(null); }}>Cerrar sesión</button>
       </div>
       <h1>TiCaShop LATAM ERP</h1>
       <nav style={{ marginBottom: 24 }}>
@@ -349,6 +364,7 @@ function App() {
           handleFacturaChange={handleFacturaChange}
         />} />
         <Route path="/empleados" element={<EmpleadosPage
+          usuario={usuario}
           empleados={empleados}
           setEmpleados={setEmpleados}
           nuevoEmpleado={nuevoEmpleado}
