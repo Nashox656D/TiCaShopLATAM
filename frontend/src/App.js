@@ -11,6 +11,7 @@ import CotizacionesPage from './CotizacionesPage';
 import OrdenesPage from './OrdenesPage';
 import FacturasPage from './FacturasPage';
 import EmpleadosPage from './EmpleadosPage';
+import VacacionesPage from './VacacionesPage';
 import TicketsPage from './TicketsPage';
 
 function App() {
@@ -283,11 +284,11 @@ function App() {
       </div>
       <h1>TiCaShop LATAM ERP</h1>
       <nav style={{ marginBottom: 24 }}>
-        {/* Recursos Humanos solo ve empleados y vacaciones */}
-        {cargo === 'Recursos Humanos' ? (
+        {/* Recursos Humanos y superuser ven empleados y vacaciones */}
+        {cargo === 'Recursos Humanos' || usuario.is_superuser ? (
           <>
             <Link to="/empleados"><button>Empleados</button></Link>
-            {/* Si tienes una página de vacaciones, agrega aquí el link */}
+            <Link to="/vacaciones"><button>Vacaciones</button></Link>
           </>
         ) : (
           <>
@@ -372,6 +373,7 @@ function App() {
           handleEmpleadoSubmit={handleEmpleadoSubmit}
           handleEmpleadoChange={handleEmpleadoChange}
         />} />
+        <Route path="/vacaciones" element={<VacacionesPage usuario={usuario} />} />
         <Route path="/tickets" element={cargo === 'Empleado' || cargo === 'Recursos Humanos' ? <Navigate to="/empleados" /> : <TicketsPage
           tickets={tickets}
           setTickets={setTickets}
