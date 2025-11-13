@@ -284,8 +284,20 @@ function App() {
       </div>
       <h1>TiCaShop LATAM ERP</h1>
       <nav style={{ marginBottom: 24 }}>
-        {/* Recursos Humanos y superuser ven empleados y vacaciones */}
-        {cargo === 'Recursos Humanos' || usuario.is_superuser ? (
+        {/* Superuser ve TODO */}
+        {usuario.is_superuser ? (
+          <>
+            <Link to="/productos"><button>Productos</button></Link>
+            <Link to="/clientes"><button>Clientes</button></Link>
+            <Link to="/stock"><button>Stock</button></Link>
+            <Link to="/cotizaciones"><button>Cotizaciones</button></Link>
+            <Link to="/ordenes"><button>Órdenes de Compra</button></Link>
+            <Link to="/facturas"><button>Facturas</button></Link>
+            <Link to="/empleados"><button>Empleados</button></Link>
+            <Link to="/vacaciones"><button>Vacaciones</button></Link>
+            <Link to="/tickets"><button>Tickets</button></Link>
+          </>
+        ) : cargo === 'Recursos Humanos' ? (
           <>
             <Link to="/empleados"><button>Empleados</button></Link>
             <Link to="/vacaciones"><button>Vacaciones</button></Link>
